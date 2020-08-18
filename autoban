@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+offender=$(while read line; do echo $line | awk '{ print $16}' | cut -d'=' -f2; done<&0)
+localized=yes
+echo $offender | grep ^10. || localized=no
+
+if [ "$localized" = "yes" ]; then
+  echo "Not banning private IP space..."
+  exit 0
+else
+  firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
+  firewall-cmd --reload
+fi
+
+if [ "$offender" = "$(dig ACLURLHERE  | grep -A1 "ANSWER SECTION" | awk '{print $5}' | tail -n1)" ]; then
+  echo "Not banning ACLURLHERE..."
+  exit 0
+else
+  firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
+  firewall-cmd --reload
+fi
