@@ -1,21 +1,32 @@
 #!/usr/bin/env bash
 
-offender=$(while read line; do echo $line | awk '{ print $16}' | cut -d'=' -f2; done<&0)
-localized=yes
-echo $offender | grep ^10. || localized=no
+ban () {
+  if [ "$localized" = "yes" ]; then
+    echo "Not banning private IP space..."
+    exit 0
+  else
+    firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
+    firewall-cmd --reload
+  fi
 
-if [ "$localized" = "yes" ]; then
-  echo "Not banning private IP space..."
-  exit 0
-else
-  firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
-  firewall-cmd --reload
-fi
+  if [ "$offender" = "$(dig $1  | grep -A1 "ANSWER SECTION" | awk '{print $5}' | tail -n1)" ]; then
+    echo "Not banning $1..."
+    exit 0
+  else
+    firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
+    firewall-cmd --reload
+  fi
+}
 
-if [ "$offender" = "$(dig ACLURLHERE  | grep -A1 "ANSWER SECTION" | awk '{print $5}' | tail -n1)" ]; then
-  echo "Not banning ACLURLHERE..."
-  exit 0
+export offender=$(while read line; do echo $line | awk '{ print $16}' | cut -d'=' -f2; done<&0)
+export localized=yes
+echo $offender | grep 10. || localized=no
+
+export dnsreverse=$(dig $offender | grep -A1 ANSWER | tail -n1 | awk '{ print $5 }')
+
+if [ -z "$dnsreverse" ]; then
+   ban $1 # the first argument is a DNS name to NOT ban
 else
-  firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
-  firewall-cmd --reload
+   offender=$dnsreverse
+   ban $1 # the first argument is a DNS name to NOT ban
 fi
