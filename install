@@ -3,7 +3,7 @@
 errorout1 () {
   echo -e "\e[31mERROR:\e[1m Unable to get sec in an environment bin.\e[0m"
   echo
-  echo "Stopping install here."
+  echo "Stopping install before execute."
   echo
   echo
   exit 1
@@ -12,7 +12,7 @@ errorout1 () {
 errorout2 () {
   echo -e "\e[31mERROR:\e[1m Unable to find firewalld-auto.cfg in install directory used \e[0m$(pwd)"
   echo
-  echo "Stopping install here."
+  echo "Stopping install before execute."
   echo
   echo
   exit 1
@@ -21,7 +21,7 @@ errorout2 () {
 errorout3 () {
   echo -e "\e[31mERROR:\e[1m Unable to find autoban in install directory used \e[0m$(pwd)"
   echo
-  echo "Stopping install here."
+  echo "Stopping install before execute."
   echo
   echo
   exit 1
@@ -30,7 +30,7 @@ errorout3 () {
 errorout4 () {
   echo -e "\e[31mERROR:\e[1m Unable to check configuration and write status.\e[0m"
   echo
-  echo "Stopping install here."
+  echo "Stopping install before execute."
   echo
   echo
   exit 1
