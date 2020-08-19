@@ -10,7 +10,7 @@ errorout1 () {
 }
 
 errorout2 () {
-  echo -e "\e[31mERROR:\e[1m Unable to find firewalld-auto.cfg in \e[0m$(pwd)"
+  echo -e "\e[31mERROR:\e[1m Unable to find firewalld-auto.cfg in install directory used \e[0m$(pwd)"
   echo
   echo "Stopping install here."
   echo
@@ -19,7 +19,7 @@ errorout2 () {
 }
 
 errorout3 () {
-  echo -e "\e[31mERROR:\e[1m Unable to find autoban in \e[0m$(pwd)"
+  echo -e "\e[31mERROR:\e[1m Unable to find autoban in install directory used \e[0m$(pwd)"
   echo
   echo "Stopping install here."
   echo
@@ -35,6 +35,7 @@ errorout4 () {
   echo
   exit 1
 }
+
 
 installinfo () {
   echo
