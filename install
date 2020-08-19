@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+echo -e "Installing \e[31mfirewall-d autoban\e[0m"
+echo
+which sec || yum install -y sec
+mkdir /etc/firewalld-auto/ 2>/dev/null
+cp firewalld-auto.cfg /etc/firewalld-auto/
+chmod +x enforce-autoban
+cp enforce-autoban /usr/local/sbin/
+
+croncheck=$(grep enforce-autoban /etc/crontab | wc -l)
+
+if [ "$croncheck" = 1 ]; then
+  echo "WARN: a crontab of enforce-autoban was found, not adding another enforce-autoban. You may want to ensure that the existing enforcing works!"
+elif (( "$crontabckeck" >= "2" )); then
+  echo "ERROR: too many cron jobs named enforce-autoban were found! Please review /etc/crontab for enforce-autoban jobs!"
+else
+  echo "*/1 * * * * /usr/local/sbin/enforce-autoban" >> /etc/crontab
+  echo >> /etc/crontab
+fi
+
+echo -e "Install \e[32mcompleted \e[0m"
+echo
