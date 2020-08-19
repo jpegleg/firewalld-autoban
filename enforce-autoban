@@ -27,5 +27,5 @@ if pgrep -x "sec" >/dev/null
 then
         exit 0
 else
-        sec --conf /etc/firewalld-auto.cfg --input /var/log/secure --log /var/log/firewall-auto.log --detach
+        sec --conf /etc/firewalld-auto/firewalld-auto.cfg --input /var/log/secure --log /var/log/firewall-auto.log --detach
 fi
