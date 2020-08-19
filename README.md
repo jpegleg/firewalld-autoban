@@ -1,4 +1,9 @@
 # firewalld-autoban
+
+see https://simple-evcorr.github.io/
+and https://github.com/firewalld
+
+
 Block IPs that SSH repeatedly and fail to authenticate.
 
 
