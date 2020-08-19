@@ -1,6 +1,13 @@
 # firewalld-autoban
 Block IPs that SSH repeatedly and fail to authenticate.
 
+
+Install with
+chmod +x install
+./install
+
+...
+
 Create a single exception by editing the config section from:
 
 action=pipe '$0' /usr/local/sbin/autoban
