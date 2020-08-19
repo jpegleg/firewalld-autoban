@@ -1,20 +1,65 @@
 #!/usr/bin/env bash
 
-echo
-echo
-echo -e "\e[1mInstalling \e[31mfirewall-d autoban\e[0m $(date +%Y%m%d%H%M%S%N)\e[0m"
-echo
-echo -e "\e[1m\e[36m------------->\e[0m checking for sec in env bin...$(which sec)" || yum install -y sec
-echo
-checksec=$(which sec)
-echo -e "\e[1mSHA256 \e[0mof\e[1m \e[32m$checksec \e[0m\e[36mat time of\e[1m $(date +%Y%m%d%H%M%S%N)\e[0m:"
-echo
-sha256sum $checksec
-echo
-echo -e "\e[45mDisabling the systemd start of\e[0m sec..."
-echo
-echo -e "\e[35mUsing \e[33m/etc/crontab\e[0m checks for process\e[1m sec \e[32minstead\e[0m"
-echo
+errorout1 () {
+  echo -e "\e[31mERROR:\e[1m Unable to get sec in an environment bin. Exit.\e[0m"
+  echo
+  echo
+  exit 1
+}
+
+errorout2 () {
+  echo -e "\e[31mERROR:\e[1m Unable to find firewalld-auto.cfg in \e[0m$(pwd) Exit."
+  echo
+  echo
+  exit 1
+}
+
+errorout3 () {
+  echo -e "\e[31mERROR:\e[1m Unable to find autoban in \e[0m$(pwd) Exit."
+  echo
+  echo
+  exit 1
+}
+
+errorout4 () {
+  echo -e "\e[31mERROR:\e[1m Unable to check configuration and write status. Exit.\e[0m"
+  echo
+  echo
+  exit 1
+}
+
+
+
+installinfo () {
+  echo
+  echo
+  echo -e "\e[1mInstalling \e[31mfirewall-d autoban\e[0m $(date +%Y%m%d%H%M%S%N)\e[0m"
+  echo
+  echo -e "\e[1m\e[36m------------->\e[0m checking for sec in env bin...$(which sec)" || yum install -y sec
+  echo
+  checksec=$(which sec)
+  echo -e "\e[1mSHA256 \e[0mof\e[1m \e[32m$checksec \e[0m\e[36mat time of\e[1m $(date +%Y%m%d%H%M%S%N)\e[0m:"
+  echo
+  sha256sum $checksec || errorout1
+  echo
+  echo -e "\e[1mSHA256 \e[0mof\e[1m \e[32m./firewalld-auto.cfg \e[0m\e[36mat time of\e[1m $(date +%Y%m%d%H%M%S%N)\e[0m:"
+  echo
+  sha256sum firewalld-auto.cfg || errorout2
+  echo
+  echo -e "\e[1mSHA256 \e[0mof\e[1m \e[32m./autoban \e[0m\e[36mat time of\e[1m $(date +%Y%m%d%H%M%S%N)\e[0m:"
+  echo
+  sha256sum autoban || errorout3
+  echo
+  echo
+  echo -e "\e[45mDisabling the systemd start of\e[0m sec..."
+  echo
+  echo -e "\e[35mUsing \e[33m/etc/crontab\e[0m checks for process\e[1m sec \e[32minstead\e[0m"
+  echo
+  echo
+}
+
+installinfo | tee /var/log/firewalld-autoban.install.txt || errorout4
+
 
 systemctl disable sec || echo -e "\e[31msystemctl disable sec failed!\e[0m"
 mkdir /etc/firewalld-auto/ 2>/dev/null
