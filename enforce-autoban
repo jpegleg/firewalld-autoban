@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash 
 
 # The default is to read web server logs, have your instance single process, with a config of /etc/gathera.cfg
 # customize that to your config or link and input as well as log location as needed, of course.
