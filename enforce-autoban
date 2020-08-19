@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# The default is to read web server logs, have your instance single process, with a config of /etc/gathera.cfg
+# customize that to your config or link and input as well as log location as needed, of course.
+
+# Schedule this up in root's crontab like
+# */1 * * * * /usr/local/sbin/enforce-autoban
+
+# The purpose is that init systems may have issues, and we might not want to rely on systemd for example,
+# may want to keep separate the enforcement of mission critical monitoring.
+# So in this model, we ditch trust in the init systems and use the cron service to ensure
+# the daemon is running. In addition to avoiding init system complications, this generic approach
+# also does process enforcement. If another user or process kills the daemon, this script
+# will bring it back via cron run, without having to rely on monit etc either.
+
+# On a system with monit you can utilize, you would likely just have monit enfoce the process is running instead.
+# Or along with, as double enforcement, because double enforcement works gracefully with this technique.
+
+# Where this thing lacks in its default form here is looking for "sec" to identify.
+# A hardening change that is easy enough is to copy your /usr/local/bin/sec to /usr/local/bin/sec.somethingreallyunique
+# so that the pgrep always catches the correct process. And of course, update the script to replace sec with your
+# unique name. That way also allows you to have multiple instances maintained by alternative enforcement mechanisms.
+
+#       sec --conf /etc/firewalld-auto.cfg --input /var/log/secure --log /var/log/firewall-auto.log --detach 
+
+if pgrep -x "sec" >/dev/null
+then
+        exit 0
+else
+        sec --conf /etc/firewalld-auto.cfg --input /var/log/secure --log /var/log/firewall-auto.log --detach
+fi
