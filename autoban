@@ -27,6 +27,6 @@ export dnsreverse=$(dig $offender | grep -A1 ANSWER | tail -n1 | awk '{ print $5
 if [ -z "$dnsreverse" ]; then
    ban $1 # the first argument is a DNS name to NOT ban
 else
-   offender=$dnsreverse
+   export offender=$dnsreverse
    ban $1 # the first argument is a DNS name to NOT ban
 fi
