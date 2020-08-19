@@ -4,8 +4,11 @@ echo
 echo
 echo -e "\e[1mInstalling \e[31mfirewall-d autoban\e[0m $(date +%Y%m%d%H%M%S%N)\e[0m"
 echo
-which sec || yum install -y sec
+echo -e "\e[1m\e[36m------------->\e[0m checking for sec in env bin...$(which sec)" || yum install -y sec
+echo
 checksec=$(which sec)
+echo -e "\e[1mSHA256 \e[0mof\e[1m \e[32m$checksec \e[0m\e[36mat time of\e[1m $(date +%Y%m%d%H%M%S%N)\e[0m:"
+echo
 sha256sum $checksec
 echo
 echo -e "\e[45mDisabling the systemd start of\e[0m sec..."
