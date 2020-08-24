@@ -81,7 +81,7 @@ if [ "$croncheck" = 1 ]; then
 elif (( "$crontabckeck" >= "2" )); then
   echo -e "\e[1m\e[31mERROR:\e[0m too many cron jobs named enforce-autoban were found! Please review /etc/crontab for enforce-autoban jobs."
 else
-  echo "*/1 * * * * /usr/local/sbin/enforce-autoban >/dev/null 2>&1" >> /etc/crontab
+  echo "*/1 * * * * root /usr/local/sbin/enforce-autoban >/dev/null 2>&1" >> /etc/crontab
   echo >> /etc/crontab
 fi
 
