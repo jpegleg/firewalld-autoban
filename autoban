@@ -6,6 +6,8 @@ ban () {
     exit 0
   else
     firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
+    # stop some dirty stuff
+    firewall-cmd --permanent --add-rich-rule="rule family='ipv6' source address='::ffff:$offender' reject"
     firewall-cmd --reload
   fi
 
@@ -14,6 +16,8 @@ ban () {
     exit 0
   else
     firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
+    # stop some dirty stuff
+    firewall-cmd --permanent --add-rich-rule="rule family='ipv6' source address='::ffff:$offender' reject"
     firewall-cmd --reload
   fi
 }
