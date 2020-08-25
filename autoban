@@ -4,19 +4,15 @@ ban () {
   if [ "$localized" = "yes" ]; then
     echo "Not banning private IP space..."
     exit 0
-  else
-    firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
-    # stop some dirty stuff
-    firewall-cmd --permanent --add-rich-rule="rule family='ipv6' source address='::ffff:$offender' reject"
-    firewall-cmd --reload
   fi
 
   if [ "$offender" = "$(dig $1  | grep -A1 "ANSWER SECTION" | awk '{print $5}' | tail -n1)" ]; then
     echo "Not banning $1..."
     exit 0
   else
-    firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject"
-    # stop some dirty stuff
+    # set the firwall, we'll try ipv4 first, if there is an error, then we'll try ipv6
+    firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject" || firewall-cmd --permanent --add-rich-rule="rule family='ipv6' source address='$offender' reject" 
+    # then we'll also do this little ditty to stop some nasty things
     firewall-cmd --permanent --add-rich-rule="rule family='ipv6' source address='::ffff:$offender' reject"
     firewall-cmd --reload
   fi
