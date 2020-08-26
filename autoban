@@ -12,8 +12,10 @@ ban () {
   else
     # set the firwall, we'll try ipv4 first, if there is an error, then we'll try ipv6
     firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='$offender' reject" || firewall-cmd --permanent --add-rich-rule="rule family='ipv6' source address='$offender' reject" 
-    # then we'll also do this little ditty to stop some nasty things
-    firewall-cmd --permanent --add-rich-rule="rule family='ipv6' source address='::ffff:$offender' reject"
+    # bring this one in if there is ever a bug with RFC 4038 implementation
+    # tested on 8/24/20 CentOS 7 and this next commented one is commented because it 
+    # is currently not needed because the padded IPv4 address gets properly processed through the IPv4 rules.
+    # firewall-cmd --permanent --add-rich-rule="rule family='ipv6' source address='::ffff:$offender' reject"
     firewall-cmd --reload
   fi
 }
