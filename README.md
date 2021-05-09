@@ -29,7 +29,7 @@ see the next section on permanent excludes.
 
 In addition to the one custom ACL in the first argument to autoban,
 autoban also never blocks IPs starting with 10. as they are private IPs, see rfc5735 for more.
-Additional IPs or IP regex or IP ranges can be added along with this by changing "10." to "10.\|172.151."
+Additional IPs or IP regex or IP ranges can be added along with this by changing "10\.....\|192\.16\.....\|172\.16\....\|172\.17\...." to "what ever regex"
 to add in 172.151.X.Y (example regex by simply leaving off the third and fourth octet)
 
 ...
