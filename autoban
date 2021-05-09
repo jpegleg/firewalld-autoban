@@ -18,7 +18,7 @@ ban () {
 
 export offender=$(while read line; do echo $line | awk '{ print $16}' | cut -d'=' -f2; done<&0)
 export localized=yes
-echo $offender | grep 10. || export localized=no
+echo $offender | grep "10\.....\|192\.16\.\|172\.16\." || export localized=no
 
 export dnsreverse=$(dig $offender | grep -A1 ANSWER | tail -n1 | awk '{ print $5 }')
 
